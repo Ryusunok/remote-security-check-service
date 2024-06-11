@@ -1,0 +1,171 @@
+<!doctype html>
+{% load static %}
+<html lang="en" class="fullscreen-bg">
+
+<head>
+	<title>회원가입 | 보안관제시스템</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}">
+	<link rel="stylesheet" href="{% static 'vendor/linearicons/style.css' %}">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="{% static 'css/main.css' %}">
+	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+	<link rel="stylesheet" href="{% static 'css/demo.css' %}">
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="{% static 'img/apple-icon.png' %}">
+	<link rel="icon" type="image/png" sizes="96x96" href="{% static 'img/favicon.png' %}">
+</head>
+
+<body>
+	{% if custom_error %}
+	<div class="alert alert-danger alert-dismissible" role="alert">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+		<i class="fa fa-times-circle"></i> 기입한 정보를 다시 한번 확인해주세요.
+	</div>
+	{% endif %}
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<div class="vertical-align-wrap">
+			<div class="vertical-align-middle">
+				<div class="auth-box lockscreen clearfix" style="height: fit-content;">
+					<div class="content">
+						<h1 class="sr-only">Klorofil - 최선을 다하는 원격보안점검 시스템</h1>
+						<div class="logo text-center"><img src="{% static 'img/logo-dark.png' %}" alt="Klorofil Logo"></div>
+						<div class="user text-center">
+							<img src="{% static 'img/user-medium.png' %}" class="img-circle" alt="Avatar">
+						</div>
+						<form class="form-auth-small" method="POST" onSubmit="validateForm(event)" action="">
+							{% csrf_token %}
+							<div class="form-group" style="display: flex; align-items: center; margin-bottom: 5px;">
+								<label for="signin-username" class="control-label sr-only">Id</label>
+								<input type="text" style="width: 70%"class="form-control" name="username" id="signin-username" placeholder="*UserId" required>
+								<span  class="input-group-btn" >
+									<button style="margin-top: 0;"class="btn btn-primary" type="button" id="check-username">중복확인</button>
+								</span>
+							</div>
+
+							<span id="sigiin-username-check-comment"></span>
+							
+							<div class="form-group">
+								<label for="signin-password1" class="control-label sr-only">Password</label>
+								<input type="password" class="form-control" id="signin-password1" name="password1"  placeholder="*Password" required>
+							</div>
+
+							<div class="form-group" style="margin-bottom: 5px;">
+								<label for="signin-password2" class="control-label sr-only">Password</label>
+								<input type="password" class="form-control" id="signin-password2" name="password2" placeholder="*PasswordCheck" required>
+							</div>
+
+							<span id="sigiin-password-check-comment">비밀번호는 8자리 이상이며 영문, 숫자, 특수문자((!@#$%^&*()))를 포함해야 합니다.</span>
+
+							<div class="form-group">
+								<label for="signin-user-tel" class="control-label sr-only">user_tel</label>
+								<input type="tel" class="form-control" id="signin-user-tel" name="user_tel"  placeholder="*user_tel" required>
+							</div>
+
+							<div class="form-group">
+								<label for="signin-user-email" class="control-label sr-only">user_email</label>
+								<input type="email" class="form-control" id="signin-user-email" name="user_email"  placeholder="*user_email" required>
+							</div>
+
+							<div>
+								<button type="submit" class="btn btn-primary btn-lg btn-block">회원가입</button>
+								<a href="{% url 'login' %}"><button type="button" class="btn btn-default btn-lg btn-block">로그인으로 이동</button></a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END WRAPPER -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+		let is_usernameChecked = false
+		let is_passwordChecked = false;
+		// CSRF 토큰을 JavaScript 변수로 저장
+		const csrf_token = "{{ csrf_token }}";
+	
+		// 중복 확인 버튼 클릭 이벤트 핸들러
+		document.getElementById("check-username").addEventListener("click", function() {
+			var username = document.getElementById("signin-username").value;
+			var isValid = /^[a-zA-Z0-9@.+\-_]{1,150}$/.test(username);
+			if (!isValid) {
+				const usernameCheckSpace = document.getElementById('sigiin-username-check-comment');
+				usernameCheckSpace.innerText = "150자 이하 문자, 숫자 그리고 @/./+/-/_만 가능합니다.";
+				usernameCheckSpace.style.color = '#a94442';
+        	return; // 유효하지 않으면 AJAX 요청을 보내지 않음
+    		}
+			// AJAX 요청을 보내어 중복 확인
+			// 예를 들어, jQuery를 사용하면 다음과 같이 구현할 수 있습니다.
+			$.ajax({
+				url: "{% url 'check_username' %}", // 중복 확인을 처리하는 뷰의 URL
+				method: "POST",
+				data: {
+					'username': username,
+					'csrfmiddlewaretoken': csrf_token // JavaScript 변수로 CSRF 토큰 전달
+				},
+				success: function(data) {
+					// 중복 확인 결과에 따라 사용자에게 알림
+					const usernameCheckSpace = document.getElementById('sigiin-username-check-comment')
+					if (data.is_taken) {
+						usernameCheckSpace.innerText= "사용할 수 없는 아이디입니다."
+						usernameCheckSpace.style.color ='#a94442';
+					} else {
+						is_usernameChecked = true
+						usernameCheckSpace.innerText= "사용가능한 아이디입니다."
+						usernameCheckSpace.style.color ='#31708f';
+					}
+				}
+			});
+		});
+
+	function validateForm(event) {
+		event.preventDefault();
+		let password1 = document.getElementById("signin-password1").value;
+		let password2 = document.getElementById("signin-password2").value;
+		const pwCheckSpace = document.getElementById("sigiin-password-check-comment");
+
+		// 비밀번호 규칙 확인
+		const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()]).{8,}$/;
+		if (password1 !== password2) {
+			pwCheckSpace.innerText = "비밀번호가 일치하지 않습니다.";
+			pwCheckSpace.style.color = '#a94442';
+			is_passwordChecked = false;
+			return false; // 폼 제출 방지
+		}
+
+		if (!passwordPattern.test(password1)) {
+			pwCheckSpace.innerText = "유효하지 않은 비밀번호입니다.";
+			pwCheckSpace.style.color = '#a94442';
+			is_passwordChecked = false;
+			return false; // 폼 제출 방지
+		}
+
+		// 비밀번호가 일치하고 is_checked가 true인 경우에만 폼을 제출
+		if (is_usernameChecked) {
+			const form = document.querySelector('form');
+			form.submit();
+		} else {
+			alert("정보를 제대로 기입하세요.");
+			return false;
+		}
+	}
+
+	</script>
+	{% if custom_error %}
+	<script>
+		setTimeout(function(){
+			document.querySelector('.alert').style.display = 'none';
+		}, 3000);
+	</script>
+   {% endif %}
+</body>
+
+</html>

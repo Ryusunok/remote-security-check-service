@@ -1,0 +1,93 @@
+ <!doctype html>
+ {% load static %}
+ <html lang="en">
+ 
+ <head>
+     <title>회원탈퇴 | 보안관제시스템</title>
+     <meta charset="utf-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+     <!-- VENDOR CSS -->
+     <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+     <link rel="stylesheet" href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}">
+     <link rel="stylesheet" href="{% static 'vendor/linearicons/style.css' %}">
+     <!-- MAIN CSS -->
+     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+     <!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+     <link rel="stylesheet" href="{% static 'css/demo.css' %}">
+     <!-- GOOGLE FONTS -->
+     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+     <!-- ICONS -->
+     <link rel="apple-touch-icon" sizes="76x76" href="{% static 'img/apple-icon.png' %}">
+     <link rel="icon" type="image/png" sizes="96x96" href="{% static 'img/favicon.png' %}">
+ </head>
+ 
+ <body>
+     <!-- WRAPPER -->
+     <div id="wrapper">
+         <!-- NAVBAR -->
+         <nav class="navbar navbar-default navbar-fixed-top">
+             <div class="brand">
+                 <a href="{% url 'home' %}"><img src="{% static 'img/logo-dark.png' %}" alt="Klorofil Logo" class="img-responsive logo"></a>
+             </div>
+             {% include 'menu_top.html' %}
+         </nav>
+         <!-- END NAVBAR -->
+         <!-- LEFT SIDEBAR -->
+         {% include 'sidebar.html' %}
+         <!-- END LEFT SIDEBAR -->
+         <!-- MAIN -->
+         <div class="main">
+             <!-- MAIN CONTENT -->
+             <div class="main-content">
+                 <div class="container-fluid">
+                     <h3 class="page-title">회원탈퇴</h3>
+                     <div class="panel panel-headline">
+                         <div class="panel-body">
+                             <h4>회원탈퇴 절차</h4>
+                             <p>회원은 언제든지 서비스 내 회원탈퇴 메뉴를 통해 탈퇴할 수 있습니다.
+                                회원탈퇴 절차를 완료하기 위해서는 본인 인증이 필요합니다.
+                                탈퇴 요청 시, 해당 계정에 대한 모든 정보와 데이터가 삭제됩니다.</p>
+                             <hr>
+
+                             <h4>회원탈퇴의 효과</h4>
+                             <p>회원탈퇴가 완료되면 해당 회원의 서비스 이용권이 소멸됩니다.
+                                탈퇴 후에는 기존에 등록한 모든 정보와 데이터가 복구되지 않습니다.
+                                탈퇴된 회원의 게시물이나 정보는 서비스에서 완전히 삭제됩니다.</p>
+                             <hr>
+
+                             <h4>회원탈퇴 시 주의사항</h4>
+                             <p>회원탈퇴 시, 미해결된 거래 또는 서비스 관련 사항이 있는 경우, 해당 사항이 해결될 때까지는 탈퇴가 불가능할 수 있습니다.
+                                회원탈퇴 이전에는 필요한 정보를 미리 백업하시기를 권장합니다.</p>
+                             <hr>
+
+                             <h4>회원탈퇴의 제한</h4>
+                             <p>특정 상황에서 회원탈퇴가 제한될 수 있습니다. 이 경우 회원에게 별도로 통보됩니다.
+                                미성년자나 법적으로 제한된 회원은 법률에 따라 회원탈퇴가 제한될 수 있습니다.</p>
+                             <hr>
+
+                             <h4>회원탈퇴에 대한 변경사항</h4>
+                             <p>회사는 회원탈퇴 약관을 변경할 권리를 가지며, 변경사항은 서비스 내 공지사항을 통해 공지됩니다.
+                                변경사항에 대한 이의가 있는 경우, 회원은 해당 변경사항을 거부하고 서비스를 계속 이용할 수 있습니다. 단, 이 경우 회사는 회원탈퇴 조치를 취할 수 있습니다.</p>
+                             <hr>
+                             <form method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">회원탈퇴</button>
+                            </form>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <!-- END MAIN CONTENT -->
+         </div>
+         <!-- END MAIN -->
+     </div>
+     <!-- END WRAPPER -->
+     <!-- Javascript -->
+     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+     <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+     <script src="{% static 'vendor/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+     <script src="{% static 'scripts/klorofil-common.js' %}"></script>
+ </body>
+ 
+ </html>

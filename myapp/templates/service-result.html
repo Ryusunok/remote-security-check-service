@@ -1,0 +1,302 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<!-- 
+     '''
+    service_result_data
+    {'LINUX': [{'category': '계정관리', 'question': 'root 계정 원격 접속 제한', 'info_memo': '내거 u01, u04', 'action_taken': '["1. vi 편집기를 이용하여 /etc/ssh/sshd_config 파일을 연다. vi /etc/ssh/sshd_config 입력", \n"2. PermitRootLogin 찾는다 /permitRootLogin를 치고 엔터를 누르면 찾을 수 있다."]', 'result': '취약\n', 'date': datetime.date(2024, 6, 10)}, {'category': '계정관리', 'question': '패스워드 최대 사 용 기간 설정', 'info_memo': '내거 u01, u04', 'action_taken': '["1. vi /etc/login.defs 입력", "2. PASS_MAX_DAYS 90 으로 수정하여 패스워드 설정기간을 90일 이내로 설정한다."]', 'result': '취약\n', 'date': datetime.date(2024, 6, 10)}], 'TOMCAT': [], 'NGINX': [], 'MYSQL': [], 'DOCKER': []}
+    '''
+ -->
+<head>
+    <title>원격 서비스 결과 조회 | 보안관제시스템</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/linearicons/style.css' %}">
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+    <link rel="stylesheet" href="{% static 'css/demo.css' %}">
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+    <!-- ICONS -->
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'img/apple-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'img/favicon.png' %}">
+    <style>
+        .vulnerable {
+            background-color: #ffcccc; /* 붉은색 배경색 */
+        }
+    
+        .safe {
+            background-color: #ccffcc; /* 초록색 배경색 */
+    }
+    </style>
+</head>
+
+<body>
+    <!-- WRAPPER -->
+    <div id="wrapper">
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="brand">
+                <a href="{% url 'home' %}"><img src="{% static 'img/logo-dark.png' %}" alt="Klorofil Logo"
+                        class="img-responsive logo"></a>
+            </div>
+            {% include 'menu_top.html' %}
+        </nav>
+        <!-- END NAVBAR -->
+        <!-- LEFT SIDEBAR -->
+        {% include 'sidebar.html' %}
+        <!-- END LEFT SIDEBAR -->
+        <!-- MAIN -->
+        <div class="main">
+            <!-- MAIN CONTENT -->
+            <div class="main-content">
+                <div class="container-fluid">
+                    <h3 class="page-title">원격 서비스 결과 조회</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- BASIC TABLE -->
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">linux</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>구분</th>
+                                                <th>서비스 메모</th>
+                                                <th>점검내용</th>
+                                                <th>결과</th>
+                                                <th>날짜</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for data in service_result_data.LINUX %}
+                                            <tr class="{% if data.result.strip == '취약' %}vulnerable{% else %}safe{% endif %}">
+                                                <td>{{ data.category }}</td>
+                                                <td>{{ data.info_memo }}</td>
+                                                <td>{{ data.question }}</td>
+                                                <td>{{ data.result }}</td>
+                                                <td>{{ data.date }}</td>
+                                            </tr>
+                                            <tr class="action_taken" style="display: none;">
+                                                <td colspan="5">
+                                                    <ul>
+                                                        {% for action in data.action_taken %}
+                                                            <li>{{ action }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+									<div class="row" style="display: flex; justify-content: end;">
+										<div class="col-md-6 text-right"><a href="#" class="btn btn-primary">모든 점검 결과 보기</a></div>
+									</div>
+								</div>
+                            </div>
+                            <!-- END BASIC TABLE -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- BASIC TABLE -->
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">tomcat</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>구분</th>
+                                                <th>서비스 메모</th>
+                                                <th>점검내용</th>
+                                                <th>결과</th>
+                                                <th>날짜</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for data in service_result_data.TOMCAT %}
+                                            <tr class="{% if data.result.strip == '취약' %}vulnerable{% else %}safe{% endif %}">
+                                                <td>{{ data.category }}</td>
+                                                <td>{{ data.info_memo }}</td>
+                                                <td>{{ data.question }}</td>
+                                                <td>{{ data.result }}</td>
+                                                <td>{{ data.date }}</td>
+                                            </tr>
+                                            <tr class="action_taken" style="display: none;">
+                                                <td colspan="5">{{ data.action_taken }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+									<div class="row" style="display: flex; justify-content: end;">
+										<div class="col-md-6 text-right"><a href="#" class="btn btn-primary">모든 점검 결과 보기</a></div>
+									</div>
+								</div>
+                            </div>
+                            <!-- END BASIC TABLE -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- BASIC TABLE -->
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">mysql</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>구분</th>
+                                                <th>서비스 메모</th>
+                                                <th>점검내용</th>
+                                                <th>결과</th>
+                                                <th>날짜</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for data in service_result_data.MYSQL %}
+                                            <tr class="{% if data.result.strip == '취약' %}vulnerable{% else %}safe{% endif %}">
+                                                <td>{{ data.category }}</td>
+                                                <td>{{ data.info_memo }}</td>
+                                                <td>{{ data.question }}</td>
+                                                <td>{{ data.result }}</td>
+                                                <td>{{ data.date }}</td>
+                                            </tr>
+                                            <tr class="action_taken" style="display: none;">
+                                                <td colspan="5">{{ data.action_taken }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+									<div class="row" style="display: flex; justify-content: end;">
+										<div class="col-md-6 text-right"><a href="#" class="btn btn-primary">모든 점검 결과 보기</a></div>
+									</div>
+								</div>
+                            </div>
+                            <!-- END BASIC TABLE -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- BASIC TABLE -->
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">docker</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>구분</th>
+                                                <th>서비스 메모</th>
+                                                <th>점검내용</th>
+                                                <th>결과</th>
+                                                <th>날짜</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for data in service_result_data.DOCKER %}
+                                            <tr class="{% if data.result.strip == '취약' %}vulnerable{% else %}safe{% endif %}">
+                                                <td>{{ data.category }}</td>
+                                                <td>{{ data.info_memo }}</td>
+                                                <td>{{ data.question }}</td>
+                                                <td>{{ data.result }}</td>
+                                                <td>{{ data.date }}</td>
+                                            </tr>
+                                            <tr class="action_taken" style="display: none;">
+                                                <td colspan="5">{{ data.action_taken }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+									<div class="row" style="display: flex; justify-content: end;">
+										<div class="col-md-6 text-right"><a href="#" class="btn btn-primary">모든 점검 결과 보기</a></div>
+									</div>
+								</div>
+                            </div>
+                            <!-- END BASIC TABLE -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- BASIC TABLE -->
+                            <div class="panel">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">nginx</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>구분</th>
+                                                <th>서비스 메모</th>
+                                                <th>점검내용</th>
+                                                <th>결과</th>
+                                                <th>날짜</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for data in service_result_data.NGINX %}
+                                            <tr class="{% if data.result.strip == '취약' %}vulnerable{% else %}safe{% endif %}">
+                                                <td>{{ data.category }}</td>
+                                                <td>{{ data.info_memo }}</td>
+                                                <td>{{ data.question }}</td>
+                                                <td>{{ data.result }}</td>
+                                                <td>{{ data.date }}</td>
+                                            </tr>
+                                            <tr class="action_taken" style="display: none;">
+                                                <td colspan="5">{{ data.action_taken }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+									<div class="row" style="display: flex; justify-content: end;">
+										<div class="col-md-6 text-right"><a href="#" class="btn btn-primary">모든 점검 결과 보기</a></div>
+									</div>
+								</div>
+                            </div>
+                            <!-- END BASIC TABLE -->
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- END MAIN CONTENT -->
+        </div>
+        <!-- END MAIN -->
+    </div>
+    <!-- END WRAPPER -->
+    <!-- Javascript -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendor/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <script src="{% static 'scripts/klorofil-common.js' %}"></script>
+    <script>
+        // jQuery를 사용하여 문서가 준비되었을 때 실행될 함수를 정의합니다.
+        $(document).ready(function() {
+            // '취약'인 경우에는 토글 기능을 추가합니다.
+            $(".vulnerable").click(function() {
+                // 해당 행의 다음 요소인 'action_taken' 클래스를 가진 요소를 토글합니다.
+                $(this).next(".action_taken").toggle();
+            });
+        });
+    </script>
+</body>
+
+</html>

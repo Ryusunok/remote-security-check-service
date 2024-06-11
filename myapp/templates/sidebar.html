@@ -1,0 +1,21 @@
+<div id="sidebar-nav" class="sidebar">
+    <div class="sidebar-scroll">
+        <nav>
+            <ul class="nav">
+                <li><a href="{% url 'home' %}" class=""><i class="lnr lnr-home"></i><span>대시보드</span></a></li>
+                <li>
+                    <a href="#subPages" data-toggle="collapse" class="collapsed"><i class="lnr lnr-briefcase"></i> <span>서비스</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+                    <div id="subPages" class="collapse ">
+                        <ul class="nav">
+                            <li><a href="{% url 'service-check' %}"  class="">원격 서비스 등록</a></li>
+                            <li><a href="{% url 'service-ready' %}" class="">원격 서비스 조회 및 검사시작</a></li>
+                            <li><a href="{% url 'service-result' %}" class="">원격 서비스 결과 조회</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
