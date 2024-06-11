@@ -1,0 +1,33 @@
+services:
+  db:
+    image: mariadb
+    hostname: db
+    container_name: db
+    environment:
+      MARIADB_USER: yoyo
+      MARIADB_PASSWORD: abcd
+      MARIADB_DATABASE: cloud_db
+      MARIADB_ROOT_PASSWORD: abcd1234
+    volumes:
+      - $PWD/mariadb:/var/lib/mysql
+
+  was:
+    build: 
+      context: ./dockers
+      dockerfile: django.docker
+
+    hostname: was
+    container_name: was
+    ports:
+      - 8000:8000
+    environment:
+      MARIADB_USER: yoyo
+      MARIADB_PASSWORD: abcd
+      MARIADB_DATABASE: cloud_db
+      MARIADB_HOST: db
+      MARIADB_PORT: 3306
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+    command: ./entrypoint.sh
